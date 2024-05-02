@@ -122,12 +122,12 @@ cv2.destroyAllWindows()
 time.sleep(1)
 res1 = list.count(1)
 res2 = list.count(2)
-max = max(res1, res2)
+mx = max(res1, res2)
 res = 0
-if res1 > res2:
-    res = 1
-else:
+if mx == res2:
     res = 2
+else:
+    res = 1
 print("resultat:", res)
 response = requests.get(f"http://192.168.4.1/fingers?num={res}")
 print(response.text)
