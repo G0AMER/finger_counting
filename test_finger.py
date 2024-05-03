@@ -67,7 +67,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
             break
 
 t = time.time()
-list = []
+list1 = []
 with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as hands:
     while time.time() - t < 2:
         ret, image = video.read()
@@ -108,7 +108,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
                             else:
                                 fingers.append(0)
                     total = fingers.count(1)
-                    list += [total]
+                    list1.append(total)
                     print(total)
         # Send HTTP GET request to ESP32-CAM with number offingers detected
         # response = requests.get(f"http://192.168.4.1/fingers?num={total}")
@@ -120,8 +120,9 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
 video.release()
 cv2.destroyAllWindows()
 time.sleep(1)
-res1 = list.count(1)
-res2 = list.count(2)
+print(list1)
+res1 = list1.count(1)
+res2 = list1.count(2)
 mx = max(res1, res2)
 res = 0
 if mx == res2:
