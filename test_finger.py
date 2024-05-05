@@ -15,9 +15,9 @@ while response.text != "go":
 print(response.text)
 video = cv2.VideoCapture("http://192.168.4.1/stream")
 total = 0
-
+t = time.time()
 with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as hands:
-    while total == 0:
+    while total == 0 or time.time() - t < 3:
         ret, image = video.read()
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image.flags.writeable = False
@@ -68,7 +68,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
 
 t = time.time()
 list1 = []
-with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as hands:
+with mp_hand.Hands(min_detection_confidence=0.4, min_tracking_confidence=0.4) as hands:
     while time.time() - t < 2:
         ret, image = video.read()
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -107,9 +107,11 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
                                 fingers.append(1)
                             else:
                                 fingers.append(0)
+                    list1.append(fingers.count(1))
+                    list1.append(fingers.count(1))
                     total = fingers.count(1)
-                    list1.append(total)
                     print(total)
+
         # Send HTTP GET request to ESP32-CAM with number offingers detected
         # response = requests.get(f"http://192.168.4.1/fingers?num={total}")
         # print(response.text)
@@ -119,7 +121,7 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
             break
 video.release()
 cv2.destroyAllWindows()
-time.sleep(1)
+time.sleep(0.5)
 print(list1)
 res1 = list1.count(1)
 res2 = list1.count(2)
