@@ -4,6 +4,7 @@ import cv2
 import mediapipe as mp
 import requests
 
+
 mp_draw = mp.solutions.drawing_utils
 mp_hand = mp.solutions.hands
 tipIds = [4, 8, 12, 16, 20]
