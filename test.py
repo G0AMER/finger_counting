@@ -1,3 +1,5 @@
+#ceci est un code de test
+
 import cv2
 import mediapipe as mp
 
@@ -6,7 +8,7 @@ mp_hand = mp.solutions.hands
 tipIds = [4, 8, 12, 16, 20]
 
 video = cv2.VideoCapture("http://192.168.4.1/stream")
-
+#video = cv2.VideoCapture(0)
 with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as hands:
     while True:
         ret, image = video.read()
@@ -55,16 +57,16 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
                         cv2.putText(image, "1 Finger", (45, 375), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5)
 
                     elif total == 2:
-                        cv2.putText(image, "2 Finger", (45, 375), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5)
+                        cv2.putText(image, "2 Fingers", (45, 375), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5)
 
                     elif total == 3:
-                        cv2.putText(image, "3 Finger", (45, 375), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5)
+                        cv2.putText(image, "3 Fingers", (45, 375), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5)
 
                     elif total == 4:
-                        cv2.putText(image, "4 Finger", (45, 375), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5)
+                        cv2.putText(image, "4 Fingers", (45, 375), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5)
 
                     elif total == 5:
-                        cv2.putText(image, "5 Finger", (45, 375), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5)
+                        cv2.putText(image, "5 Fingers", (45, 375), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5)
 
         cv2.imshow("Frame", image)
         k = cv2.waitKey(1)

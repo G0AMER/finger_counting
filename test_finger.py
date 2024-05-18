@@ -1,24 +1,29 @@
+# le code exécuté lors du navigation du robot
+
 import time
 
 import cv2
 import mediapipe as mp
 import requests
 
-
 mp_draw = mp.solutions.drawing_utils
 mp_hand = mp.solutions.hands
 tipIds = [4, 8, 12, 16, 20]
+# attendre le signal de début du détection
 response = requests.get(f"http://192.168.4.1/start?signal={'wait'}")
 while response.text != "go":
     response = requests.get(f"http://192.168.4.1/start?signal={'wait'}")
     print(response.text)
     time.sleep(1)
 print(response.text)
+# début du détection avec la caméra d'ESP32 CAM
 video = cv2.VideoCapture("http://192.168.4.1/stream")
 total = 0
 t = time.time()
+# définir un timeout dans le cas ou le robot n'a pas pu détecter la main
+timeout = 3
 with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as hands:
-    while total == 0 or time.time() - t < 3:
+    while total == 0 or time.time() - t < timeout:
         ret, image = video.read()
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image.flags.writeable = False
@@ -59,9 +64,6 @@ with mp_hand.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5) as
                     total = fingers.count(1)
 
                     print(total)
-        # Send HTTP GET request to ESP32-CAM with number offingers detected
-        # response = requests.get(f"http://192.168.4.1/fingers?num={total}")
-        # print(response.text)
         cv2.imshow("Frame", image)
         k = cv2.waitKey(1)
         if k == ord('q'):
@@ -113,9 +115,6 @@ with mp_hand.Hands(min_detection_confidence=0.4, min_tracking_confidence=0.4) as
                     total = fingers.count(1)
                     print(total)
 
-        # Send HTTP GET request to ESP32-CAM with number offingers detected
-        # response = requests.get(f"http://192.168.4.1/fingers?num={total}")
-        # print(response.text)
         cv2.imshow("Frame", image)
         k = cv2.waitKey(1)
         if k == ord('q'):
@@ -133,6 +132,7 @@ if mx == res2:
 else:
     res = 1
 print("resultat:", res)
+# envoyer le résultat vers la carte qui contrôle les moteurs pour choisir le bon chemin
 response = requests.get(f"http://192.168.4.1/fingers?num={res}")
 print(response.text)
 video = cv2.VideoCapture("http://192.168.4.1/stream")
